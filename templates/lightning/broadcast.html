@@ -10,7 +10,7 @@
         var signedPsbt = document.querySelector('#message').value;
         Swal.fire({
             title: 'Confirm Broadcast',
-	    text: `Total BTC before fees: ${getUnsignedPSBTAmount.getUnsignedPSBTAmount(signedPsbt)}`,
+	    text: `Total BTC before fees: ₿${getUnsignedPSBTAmount.getUnsignedPSBTAmount(signedPsbt)}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
