@@ -8,9 +8,16 @@
 <script>
     const createInvoice = function() {
         var unsignedPsbt = document.querySelector('#message').value;
+	var returnTxt = "";
+	try {
+	    var btcAmount = getUnsignedPSBTAmount.getUnsignedPSBTAmount(unsignedPsbt);
+	    returnTxt = `Total BTC before fees: ₿${btcAmount}`;
+	} catch {
+	    returnTxt = "Please enter a valid PSBT value";
+	}
         Swal.fire({
             title: 'Confirm Sign',
-	    text: `Total BTC before fees: ₿${getUnsignedPSBTAmount.getUnsignedPSBTAmount(unsignedPsbt)}`,
+	    text: returnTxt,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
