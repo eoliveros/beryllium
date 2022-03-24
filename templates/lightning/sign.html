@@ -37,7 +37,7 @@
 			})
 			.then(response => response.text())
 			.then(data => {
-				if (data !== "error") {
+				if (!data.includes("error")) {
 					console.log('Success:', data);
 					var convertedData = JSON.parse(data);
 					navigator.clipboard.writeText(convertedData["signed_psbt"]);
