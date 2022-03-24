@@ -79,15 +79,6 @@ def process_deposits_and_broker_orders():
         logger.info('process broker orders..')
         broker.broker_orders_update(db.session)
 
-#def qrcode_svg_create(data):
-#    """ Returns SVG of input data """
-#    factory = qrcode.image.svg.SvgPathImage
-#    img = qrcode.make(data, image_factory=factory, box_size=35)
-#    output = io.BytesIO()
-#    img.save(output)
-#    svg = output.getvalue().decode('utf-8')
-#    return svg
-#
 def qrcode_svg_create_ln(data):
     """ Returns SVG of input data (LN focused) """
     factory = qrcode.image.svg.SvgPathImage
