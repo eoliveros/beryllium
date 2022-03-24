@@ -8,9 +8,16 @@
 <script>
     const createInvoice = function() {
         var signedPsbt = document.querySelector('#message').value;
+	var returnTxt = "";
+	try {
+	    var btcAmount = getUnsignedPSBTAmount.getUnsignedPSBTAmount(signedPsbt);
+	    returnTxt = `Total BTC before fees: ₿${btcAmount}`;
+	} catch {
+	    returnTxt = "Please enter a valid PSBT value";
+	}
         Swal.fire({
             title: 'Confirm Broadcast',
-	    text: `Total BTC before fees: ₿${getUnsignedPSBTAmount.getUnsignedPSBTAmount(signedPsbt)}`,
+	    text: returnTxt,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -30,7 +37,7 @@
 			})
 			.then(response => response.text())
 			.then(data => {
-				if (data !== "error") {
+				if (!data.includes("error")) {
 					console.log('Success:', data);
 					var convertedData = JSON.parse(data);
 					navigator.clipboard.writeText(convertedData["txid"]);
