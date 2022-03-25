@@ -40,9 +40,10 @@
 			totalBtc += parseFloat(paymentFields[i+1].value);
 		}
 		totalBtc = Math.round(totalBtc * 100000000) / 100000000;
+		var returnString = !isNaN(totalBtc) ? `Total: ₿${totalBtc}` : 'Please enter correct values';
 		Swal.fire({
 			title: 'Confirm Transaction',
-			text: `Total: ₿${totalBtc}`,
+			text: returnString,
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
