@@ -39,9 +39,10 @@
 			requestLoad.push(outputObj);
 			totalBtc += parseFloat(paymentFields[i+1].value);
 		}
+		var returnString = !isNaN(totalBtc) ? `Total: ₿${totalBtc}` : 'Please enter correct values';
 		Swal.fire({
 			title: 'Confirm Payment',
-			text: `Total: ₿${totalBtc}`,
+			text: returnString,
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
