@@ -94,7 +94,7 @@ class LnRpc():
         return self.instance.feerates("perkb")
 
     def key_send(self, node_id, sats):
-        return self.instance.keysend(node_id, _sat_to_msat(sats))
+        return self.instance.keysend(node_id, sats)
 
     def list_forwards(self):
         return self.instance.listforwards()

@@ -493,6 +493,23 @@ def list_peers():
 def send_node():
     return render_template("lightning/send_node.html")
 
+@app.route('/ln/keysend', strict_slashes=False)
+@app.route('/ln/keysend/<node_id>', strict_slashes=False)
+@app.route('/ln/keysend/<node_id>/<sats>', strict_slashes=False)
+@roles_accepted(Role.ROLE_ADMIN)
+def key_send(node_id=None, sats=None):
+    if (node_id is None) or (sats is None):
+        return "Please check that node_id or sats is not empty"
+    elif ("@" in str(node_id)) or (":" in str(node_id)):
+        return "Please enter just the node pubkey, NOT pubkey@ip:protocol"
+    else:
+        try:
+            rpc = LnRpc()
+            return rpc.key_send(str(node_id), int(sats) * 1000)
+        except Exception as e:
+            return str(e)
+    return "Something went wrong"
+
 @app.route('/ln/list_forwards')
 @roles_accepted(Role.ROLE_ADMIN)
 def list_forwards():
