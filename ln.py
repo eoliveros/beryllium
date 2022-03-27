@@ -96,7 +96,7 @@ class LnRpc():
         return self.instance.listchannels()
 
     def rebalance_channel(self, oscid, iscid, amount_sat):
-        return self.instance.rebalance(oscid, iscid, _sat_to_msat(amount_sat))
+        return self.instance.rebalance(oscid, iscid, amount_sat)
 
     def fee_rates(self):
         # get fee rates in unit of sats per 1000 virtual bytes
