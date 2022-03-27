@@ -37,7 +37,7 @@ class LnRpc():
 
     def invoice(self, sats, label, msg):
         # create a LN invoice
-        return self.instance.invoice(_sat_to_msat(sats), label, msg)
+        return self.instance.invoice(sats, label, msg)
 
     def invoice_status(self, bolt11: str) -> bool:
         return self.instance.listinvoices(invstring=bolt11)
