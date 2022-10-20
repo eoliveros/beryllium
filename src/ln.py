@@ -250,3 +250,9 @@ class LnRpc():
 
     def list_addrs(self):
         return self.instance.call('dev-listaddrs')
+
+    def decode(self, ln_invoice: str):
+        return self.instance.decode(ln_invoice)
+
+    def getroute(self, payee: str, amount_msat: str):
+        return self.instance.getroute(payee, amount_msat, 0)

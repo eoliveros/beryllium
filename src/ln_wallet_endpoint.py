@@ -1,5 +1,6 @@
 import logging
 import secrets
+import json
 
 from flask import Blueprint, render_template, request, flash, jsonify
 from markupsafe import Markup
@@ -72,7 +73,9 @@ def ln_invoice():
     qrcode_svg = None
     if request.method == 'POST':
         amount = request.form['amount']
-        message = request.form['message']
+        user_message = request.form['message']
+        user_wallet_addr = request.form['wallet_user_addr']
+        message = f'"user_wallet_addr": {user_wallet_addr}, "user_message": {user_message}'
         label = f"lbl-{secrets.token_urlsafe(8)}"
         rpc = LnRpc()
         bolt11 = rpc.invoice(int(amount), label, message)['bolt11']
@@ -151,10 +154,21 @@ def pay_invoice():
     invoice = ''
     if request.method == 'POST':
         invoice = request.form['invoice']
-        try:
-            result = tasks.task_manager.one_off(category, tasks.ln_pay_to_invoice, [invoice])
-        except Exception as e:
-            flash(f'Error paying invoice: {e}', 'danger')
+        decode_lninvoice = LnRpc().decode(invoice)
+        logger.info('decode_lninvoice: %s', decode_lninvoice)
+        ####TODO: 
+        #### Perform a getroute in here and parse the result with decode and see if there are routes.
+        get_route = LnRpc().getroute(decode_lninvoice['payee'], decode_lninvoice['amount_msat'])
+        no_of_routes = int(len(get_route['route']))
+        #### WHEN NO ROUTE, its a selfpayment do something else otherwise do the request.method below
+        if not get_route or no_of_routes == 0:
+            decode_pay = LnRpc().decode_bolt11(str(invoice))
+            flash(f'The invoice being paid is created within this node. This feature(self-payment) is currently not available.', 'danger')
+        else:
+            try:
+                result = tasks.task_manager.one_off(category, tasks.ln_pay_to_invoice, [invoice])
+            except Exception as e:
+                flash(f'Error paying invoice: {e}', 'danger')
     return render_template("lightning/pay_invoice.html", invoice=invoice, funds_dict=LnRpc().list_funds())
 
 @ln_wallet.route('/lightning_transactions', methods=['GET'])

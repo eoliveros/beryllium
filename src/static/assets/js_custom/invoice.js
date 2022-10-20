@@ -32,7 +32,7 @@ function socketOpen(label) {
     });
 }
 
-function confirm(formclass, amount) {
+function confirm(formclass, amount, wallet_user_addr) {
     if (!document.querySelector(formclass).reportValidity()) {
         return;
     }
@@ -41,7 +41,7 @@ function confirm(formclass, amount) {
         return;
     }
     bootbox.confirm({
-        message: `Are you sure you want to create an invoice for ${amount} sats?`,
+        message: `Are you sure you want to create an invoice for ${amount} sats from ${wallet_user_addr}?`,
         buttons: {
             confirm: {
                 label: 'Yes',
@@ -69,7 +69,8 @@ $(document).ready(function() {
 
     $('#form-submit').click(function() {
         const amount = $('#amount').val();
-        confirm('#form', amount);
+        const wallet_user_addr = $('#wallet_user_addr').val();
+        confirm('#form', amount, wallet_user_addr);
         return false;
     });
 });
